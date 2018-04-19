@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# bnuller:
+#
+# A simple wrapper which allows us to utilize nullmailer for sending email from
+# bacula.
+#
+# Example usage:
+# mailcommand = "/usr/local/sbin/bnuller \"Bacula: %t %e of %c %l\" bacula.admin@somedomain.foo"
+# Note: This assumes that you have installed this script under /usr/local/sbin
+#
+# (C) Antti Antinoja 2018
+
+usage_exit() {
+	printf "Usage:\n"
+	printf "bnuller [Subject] [Receiver email address]\n"
+	echo ""
+	exit 1
+}
+
+compose_mail() {
+	(
+	echo "To: ${ADMIN}"
+	echo "Subject: ${SUBJECT}"
+	echo ""
+	while read MSGLINE ; do
+		echo $MSGLINE
+	done
+	) | sendmail -t
+}
+
+if [ -z "${2}" ] || [ -z "${1}" ]; then
+	usage_exit
+else
+	ADMIN=${2}
+	SUBJECT=${1}
+fi
+
+compose_mail ${SUBJECT} ${ADMIN}
