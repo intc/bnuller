@@ -36,4 +36,4 @@ else
 	SUBJECT=${1}
 fi
 
-compose_mail ${SUBJECT} ${ADMIN}
+compose_mail
