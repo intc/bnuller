@@ -13,13 +13,14 @@
 
 usage_exit() {
 	printf "Usage:\n"
-	printf "bnuller [Subject] [Receiver email address]\n"
+	printf "bnuller [Subject] [Receiver email address] ([Sender email address])\n"
 	echo ""
 	exit 1
 }
 
 compose_mail() {
 	(
+	echo "From: ${SENDER}"
 	echo "To: ${ADMIN}"
 	echo "Subject: ${SUBJECT}"
 	echo ""
@@ -34,6 +35,11 @@ if [ -z "${2}" ] || [ -z "${1}" ]; then
 else
 	ADMIN=${2}
 	SUBJECT=${1}
+	if [ -z "${3}" ]; then
+		SENDER="bacula-dir"
+	else
+		SENDER="${3}"
+	fi
 fi
 
 compose_mail
